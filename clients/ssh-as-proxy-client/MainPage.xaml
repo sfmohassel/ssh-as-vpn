@@ -1,0 +1,109 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:local="clr-namespace:ssh_as_proxy_client"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="ssh_as_proxy_client.MainPage"
+             MaximumWidthRequest="800"
+             Padding="10">
+  <ContentPage.BindingContext>
+    <local:MainPageVm/>
+  </ContentPage.BindingContext>
+
+  <ContentPage.Resources>
+    <ResourceDictionary>
+      <Style x:Key="FormLabel" TargetType="Label">
+        <Setter Property="VerticalTextAlignment" Value="Center"/>
+        <Setter Property="HorizontalTextAlignment" Value="End"/>
+      </Style>
+    </ResourceDictionary>
+  </ContentPage.Resources>
+
+  <ScrollView Margin="10">
+    <VerticalStackLayout
+      Spacing="15"
+      VerticalOptions="Center">
+      <Label Text="Active Connection:" FontSize="18"/>
+      <Border Padding="5" Stroke="lightblue" StrokeThickness="1">
+        <VerticalStackLayout Spacing="10" VerticalOptions="Center">
+          <StackLayout Orientation="Horizontal" Spacing="10">
+            <Button Text="Set System Proxy" HorizontalOptions="Center" Command="{Binding SetSystemProxyCommand}" IsEnabled="{Binding CanSetSystemProxy}" />
+            <Button Text="Clear System Proxy" HorizontalOptions="Center" Command="{Binding ClearSystemProxyCommand}" />
+          </StackLayout>
+          <StackLayout Orientation="Horizontal" Spacing="10">
+            <Label Text="Connect Automatically?" VerticalOptions="Center" VerticalTextAlignment="Center"/>
+            <Switch IsToggled="{Binding AutoConnect}" />
+          </StackLayout>
+          <Label Text="{Binding CurrentSystemProxy}" />
+          <Label Text="{Binding Status}" TextColor="{Binding StatusColor}" />
+          <StackLayout Orientation="Horizontal" Spacing="20">
+            <Button Text="Check your IP" HorizontalOptions="Center" Command="{Binding OpenMyIpCommand}" />
+            <Button Text="{Binding ButtonText}" HorizontalOptions="Center" Command="{Binding ToggleCommand}" 
+              IsVisible="{Binding AutoConnect, Converter={StaticResource NotConverter}}" />
+          </StackLayout>
+        </VerticalStackLayout>
+      </Border>
+
+      <Label Text="Edit Connections:" FontSize="18"/>
+      <Border Padding="5" Stroke="gray" StrokeThickness="1">
+        <VerticalStackLayout Spacing="10">
+          <Button Text="+ Add new Connection" Command="{Binding AddConnectionCommand}"/>
+          <StackLayout BindableLayout.ItemsSource="{Binding Connections}" HorizontalOptions="Center"
+                         VerticalOptions="Start">
+            <BindableLayout.ItemTemplate>
+              <DataTemplate>
+                <StackLayout Orientation="Horizontal" Spacing="5">
+                  <Button Text="x" Command="{Binding DeleteCommand}" BackgroundColor="Red"/>
+                  <Button Text="{Binding Name}" Command="{Binding SelectCommand}" Opacity="{Binding Opacity}"/>
+                </StackLayout>
+              </DataTemplate>
+            </BindableLayout.ItemTemplate>
+          </StackLayout>
+          <Grid RowSpacing="10" ColumnSpacing="10" IsVisible="{Binding EditingConn, Converter={StaticResource NullIsFalseConverter}}">
+            <Grid.ColumnDefinitions>
+              <ColumnDefinition Width="Auto"/>
+              <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+              <RowDefinition Height="Auto"/>
+              <RowDefinition Height="Auto"/>
+              <RowDefinition Height="Auto"/>
+              <RowDefinition Height="Auto"/>
+              <RowDefinition Height="Auto"/>
+              <RowDefinition Height="Auto"/>
+              <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <Label Grid.Row="0" Grid.Column="0" Text="Connection name" Style="{StaticResource FormLabel}"/>
+            <Entry Grid.Row="0" Grid.Column="1" Text="{Binding EditingConn.Name}" 
+               Placeholder="Connection name" ClearButtonVisibility="WhileEditing" HorizontalOptions="FillAndExpand" />
+
+            <Label Grid.Row="1" Grid.Column="0" Text="Server IP" Style="{StaticResource FormLabel}"/>
+            <Entry Grid.Row="1" Grid.Column="1" Text="{Binding EditingConn.Ip}" 
+               Placeholder="Server IP" ClearButtonVisibility="WhileEditing" HorizontalOptions="FillAndExpand" />
+
+            <Label Grid.Row="2" Grid.Column="0" Text="Server Port" Style="{StaticResource FormLabel}"/>
+            <Entry Grid.Row="2" Grid.Column="1" Text="{Binding EditingConn.Port}" 
+               Placeholder="Server Port" ClearButtonVisibility="WhileEditing" HorizontalOptions="FillAndExpand" />
+
+            <Label Grid.Row="3" Grid.Column="0" Text="Username" Style="{StaticResource FormLabel}"/>
+            <Entry Grid.Row="3" Grid.Column="1" Text="{Binding EditingConn.Username}" 
+               Placeholder="Username" ClearButtonVisibility="WhileEditing" HorizontalOptions="FillAndExpand"/>
+
+            <Label Grid.Row="4" Grid.Column="0" Text="Password" Style="{StaticResource FormLabel}"/>
+            <StackLayout Grid.Row="4" Grid.Column="1" Orientation="Horizontal" Spacing="10">
+              <Entry Text="{Binding EditingConn.Password}" Placeholder="Password" ClearButtonVisibility="WhileEditing" 
+             IsPassword="{Binding EditingConn.ShowPassword, Converter={StaticResource NotConverter}}" 
+               HorizontalOptions="FillAndExpand" />
+              <Button Text="{Binding EditingConn.ShowPasswordText}" Command="{Binding EditingConn.ToggleShowPasswordCommand}"/>
+            </StackLayout>
+
+            <Label Grid.Row="5" Grid.Column="0" Text="Local Port" Style="{StaticResource FormLabel}"/>
+            <Entry Grid.Row="5" Grid.Column="1" Text="{Binding EditingConn.LocalPort}" Placeholder="Local Port" 
+                   ClearButtonVisibility="WhileEditing" HorizontalOptions="FillAndExpand" />
+          </Grid>
+        </VerticalStackLayout>
+      </Border>
+    </VerticalStackLayout>
+  </ScrollView>
+
+</ContentPage>

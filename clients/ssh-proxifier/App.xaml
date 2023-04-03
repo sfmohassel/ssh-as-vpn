@@ -1,0 +1,13 @@
+﻿<Application x:Class="ssh_proxifier.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:ssh_proxifier"
+             StartupUri="MainWindow.xaml">
+  <Application.Resources>
+    <ResourceDictionary>
+      <local:BoolToVisibilityInvertedConverter x:Key="BoolToVisibilityInvertedConverter"/>
+      <local:HideNullConverter x:Key="HideNullConverter"/>
+      <local:BoolToColorConverter x:Key="BoolToColorConverter"/>
+    </ResourceDictionary>
+  </Application.Resources>
+</Application>
