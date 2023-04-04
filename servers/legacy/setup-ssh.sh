@@ -13,6 +13,13 @@ fi
 
 CURRENT_GROUP=$(id -g -n)
 
+sudo tee -a /etc/security/limits.conf > /dev/null <<EOT
+
+# >> VPN CONFIGURATION
+@${GROUP}   hard    maxlogins   1
+# << VPN CONFIGURATION
+EOT
+
 sudo tee -a /etc/ssh/sshd_config > /dev/null <<EOT
 
 # >> VPN CONFIGURATION
